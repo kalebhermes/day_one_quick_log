@@ -1,6 +1,6 @@
 from re import finditer
 
-class QuickLogEntry:
+class QuickLogEntryLine:
 
 	entry_date = ""
 	entry_time = ""
@@ -45,7 +45,7 @@ class QuickLogParser:
 		content = [x.strip() for x in content]
 		for con in content:
 			if(con != "## Day One Quick Log ##"):
-				x = QuickLogEntry(con)
+				x = QuickLogEntryLine(con)
 				self.entries.append(x)
 
 		return self.entries
@@ -93,8 +93,11 @@ class QuickLogParser:
 		for day in self.entries_by_day:
 			
 			days_entry = self.assemble_entry_string_for_day(day, self.entries_by_day[day])
+			entry_time = self.get_entry_time(days_entry)
 
-			bashCommand = ["dayone2", "new", days_entry, "--date=\""+day+"\"", "--journal=Daily Thoughts"]
+			# It's important that entries have a date format 6/24/18 rather than 06/24/18, for Alfred to work properly
+
+			bashCommand = ["dayone2", "new", days_entry, "--date=\"" + day + " " + entry_time + "\"", "--journal=Daily Thoughts"]
 
 			command = ""
 			for com in bashCommand:
@@ -130,10 +133,16 @@ class QuickLogParser:
 		self.entries_by_day = days
 		return days
 
+	def get_entry_time(self, entry):
+		matches = finditer("[0-9]+:[0-9]+ ([A|P]M)", entry)
+		matches = [m.group(0) for m in matches]
+
+		return matches[0]
+
 parser = QuickLogParser("/Users/kalebhermes/Dropbox/Apps/Day One Quick Log/day_one_quick_log.txt")
 
 parser.parse_log_file(parser.file)
 parser.break_entries_into_days()
 parser.enter_into_day_one()
-parser.copy_log_file(parser.file)
-parser.reset_log_file(parser.file)
+# parser.copy_log_file(parser.file)
+# parser.reset_log_file(parser.file)
