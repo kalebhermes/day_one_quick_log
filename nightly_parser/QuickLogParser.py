@@ -144,5 +144,5 @@ parser = QuickLogParser("/Users/kalebhermes/Dropbox/Apps/Day One Quick Log/day_o
 parser.parse_log_file(parser.file)
 parser.break_entries_into_days()
 parser.enter_into_day_one()
-# parser.copy_log_file(parser.file)
-# parser.reset_log_file(parser.file)
+parser.copy_log_file(parser.file)
+parser.reset_log_file(parser.file)
