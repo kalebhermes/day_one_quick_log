@@ -97,7 +97,7 @@ class QuickLogParser:
 
 			# It's important that entries have a date format 6/24/18 rather than 06/24/18, for Alfred to work properly
 
-			bashCommand = ["dayone2", "new", days_entry, "--date=\"" + day + " " + entry_time + "\"", "--journal=Daily Thoughts"]
+			bashCommand = ["/usr/local/bin/dayone2", "new", days_entry, "--date=\"" + day + " " + entry_time + "\"", "--journal=Daily Thoughts"]
 
 			command = ""
 			for com in bashCommand:
