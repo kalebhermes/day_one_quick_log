@@ -1,30 +1,49 @@
 from re import finditer
 
-class QuickLogEntryLine:
+class Line:
 
-	entry_date = ""
-	entry_time = ""
-	entry_text = ""
+	date = ""
+	time = ""
+	text = ""
+	has_error = False
 
-	def __init__(self, log):
-		self.entry_date = self.get_date(log)
-		self.entry_time = self.get_time(log)
-		self.entry_text = self.get_log(log)
+	def __init__(self, line):
+		self.date = self.get_date(line)
+		self.time = self.get_time(line)
+		self.text = self.get_log(line)
 
 	def get_date(self, string):
 		matches = finditer("[0-9]+/[0-9]+/[0-9]+", string)
 		matches = [m.group(0) for m in matches]
 
-		return matches[0]
+		if len(matches) > 0:
+			return matches[0]
+		else: 
+			self.has_error = True
+			return null
 
 	def get_time(self, string):
 		matches = finditer("[0-9]+:[0-9]+ ([A|P]M)", string)
 		matches = [m.group(0) for m in matches]
 
-		return matches[0]
+		if len(matches) > 0:
+			return matches[0]
+		else:
+			self.has_error = True
+			return null
 
 	def get_log(self, string):
-		return string[string.find("M: ")+3:]
+		if string.find("M: "):
+			return string[string.find("M: ")+3:]
+		else:
+			self.has_error = True
+			return null
+
+class Entry
+
+	entry_date = ""
+	entry_body = ""
+	entry_header = ""
 
 
 class QuickLogParser:
@@ -44,7 +63,7 @@ class QuickLogParser:
 		    content = f.readlines()
 		content = [x.strip() for x in content]
 		for con in content:
-			if(con != "## Day One Quick Log ##"):
+			if(con != "## Day One Quick Log ##" or con != ""):
 				x = QuickLogEntryLine(con)
 				self.entries.append(x)
 
